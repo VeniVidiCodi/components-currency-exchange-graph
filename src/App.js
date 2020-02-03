@@ -4,59 +4,217 @@ import './App.css';
 class App extends Component {
   // Define starting state
     state = {
-        rates: [],
+        isLoading: false,
         date: "",
-        base: "",
+        base: "USD",
+        rates: [],
+        chosenKeys: [], //['HKD', 'USD'']
+        chosenRates: [] // ['1.7468', '98969']
     };
 // ==========================================================================
+    // Define methods. Must have for forms.
+    selectBase = (ev) => {
+        // console.log('1');
+        // console.log('EV.TARGET.VALUE', ev.target.value);
+        this.setState({ base: ev.target.value }, this.updateInfo);
 
-  // Define methods. Must have for forms.
-    onBaseChange = (ev) => {
-        console.log("Base Currency Changed");
+        // console.log("Selecting New Base Currency...");
+        // console.log('base at select', this.state.base);
+    }
+
+    updateInfo = () => {
+        // console.log('BASE', this.state.base);
+        this.onRefresh();
+        // console.log(this.state.rates);
+    }
+
+    selectRate = (ev) => {
+        let choice = ev.target.value;
+        let chosenKeysUpdate = this.state.chosenKeys.concat(choice);
+        this.setState({ chosenKeys: chosenKeysUpdate });
+
+        let chosenRate = this.state.rates[choice];
+        let chosenRatesUpdate = this.state.chosenRates.concat(chosenRate);
+        this.setState({ chosenRates: chosenRatesUpdate });
+            
+        // console.log("FilterCHECK", chosenKeys.filter(key => (key of this.state.rates) ?)
+        // let values = Object.values(rates);
+        // let chosenValues = this.state.chosenRates.concat(values);
+        // this.setState({ chosenRates: chosenValues });
+
+        // {
+        //     (key === (rate in rates)) ? (
+        //         chosenRates().concat(rate.values)
+        //         ): null; 
+        // }
+        // this.checkRateList();
+        // this.makeBar();
+        // this.rateBar();
+    }
+
+    // rateBar = () => {
+    //     const rates = this.state.rates;
+    //     const chosenRates = this.state.chosenRates;
+    //     const chosenKeys = this.state.chosenKeys;
+        
+    //     rates.includes(rateList) ? (
+    //     this.state.rates.map((currency) => (
+    //         <div className="bar" style={{height: currency + "%"}}>
+    //         {currency}
+    //          </div>
+    //     ))): null
+        
+
+    
+        // Object.keys(this.state.chosenRates).map(rate,  => ( 
+        //     <div className="bar" style={{height: currency.percentage + "%"}}>
+        //     {}
+        //     </div>
+    //     // ))
+    // }
+
+
+
+    // makeBar = () => {
+        // console.log("Cont...", this.state.rates);
+        // const rateKeys = Object.keys(this.state.rates);
+        // console.log('rateKeys:::', rateKeys);
+        // const rateListKeys = chosenRates.map((rateKeys) =>(
+            
+        // ));
+        // console.log('rateListKeys:::', rateListKeys);
+
+
+        // (rates.filter(key => this.state.rates[key].main == true)) ? {
+
+        
+        // rates.map((code, rate) => (
+        //     (rate in this.state.chosenRates) ? (
+        //         <div>
+        //             {rate}
+        //         </div>
+        //     ): (
+        //         null
+        //     )
+        // ))
+    // }
+
+    // checkRateList = () => {
+    //     // if new value in chosen keys is in rates array {
+    //     //     then push key value pair to chosenRates
+    //     // }
+    //     console.log("checkRateList", this.state.rates);
+    //     console.log("checkChosenKeys", this.state.chosenKeys);
+    //     console.log("checkChosenRates", this.state.chosenRates);
+    // }
+
+
+
+    // recordItem = () => {
+    //     console.log('-------- recordItem');
+
+    //     // Fetch the inputs from the page (and console.log for debugging)
+    //     let currencyItem = this.state.rates(item, value);
+    //     let currencyCode = currencyItem[item];
+    //     let currencyValue = currencyItem[value];
+    //     console.log('Currency Inputs:', currencyCode, currencyValue);
+
+    //     // Get the value of the inputs (and console.log for debugging)
+    //     let name = nameInput.value;
+    //     let powerLevel = powerInput.value;
+    //     console.log('Values:', name, powerLevel);
+
+    //     // Challenge 4:
+    //     if (name === '') {
+    //         return; // End the function, prevent an empty input
+    //     }
+
+    //     // Push the new info onto the array & rerender
+    //     let pair = [powerLevel, name];
+    //     powerLevels.push(pair);
+    //     render();
+
+    //     // Challenge 4:
+    //     powerInput.value = '';
+    //     nameInput.value = '';
+    // }
+
+
+    // Renders bars in chart
+    addRateBar = (ev) => {
+        // this.setState.chosenRates().push()
+        console.log('2');
         const value = ev.target.value;
-        this.setState({ // Modify state
-            base: value,
-            rates: value,
+        this.setState.ratesList({
+            rate: value,
         });
     }
+
+    // removeRateBar = (ev) => {
+    //     console.log('3');
+    //     console.log("Testing RemoveBar");
+    //     // return chosenRates List without selcted value (bar clicked)
+    //     this.setState({})
+    // }
+    removeRate = (array, rate) => {
+    // if the rate is in the array, slice it 
+        const chosenRates = array.slice(); // duplicating array
+        const newChosenRates = chosenRates.filter((rate) => rate !== array);
+        return newChosenRates;
+    }
+
+    removeBar = (ev) => {
+        // when displayed bar is clicked, 
+        // remove that bar from ratesList
+        // refresh the page 
+    }
+
+//    barHeight = () => {
+//     //    TODO here
+//     }
+
+
+
+
+// ==========================================================================
 
   // Special method called when page loads
   // useful for fetching initial data
     componentDidMount = () => {
-        console.log('Component is mounting');
         this.onRefresh();     // Automatically load in page with a fetch
     }
 
     onRefresh = () => {
-        fetch("https://api.exchangeratesapi.io/latest")
+        const base = this.state.base
+        const url = "https://api.exchangeratesapi.io/latest?base=" + base
+        this.setState({
+            isLoading: true,
+        });
+        fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log("Data received:", data);
+                console.log('receiving data', data);
+
+                // Do state set for real data
                 this.setState({
                     base: data.base,
                     date: data.date,
                     rates: data.rates,
-                });   
-                console.log("checking Base: ", this.state.base);
-                const baseList = Object.keys(this.state.rates);
-                const ratesList = Object.entries(this.state.rates);
-                console.log("Base List...", baseList);
-                console.log("Rates List...", ratesList);
+                });              
             });
     }
-    
-    
 
-    setBaseCurrency = (ev) => {
-        this.setState({base: ev.target.value});
-    }
-
-    // makeBar = (ev) => {
-    // }
+// ==========================================================================
 // ==========================================================================
 
     render() {
+        // console.log('6');
         console.log("rendering page...");
+        console.log("chosen keys: ", this.state.chosenKeys);
+        // console.log(this.state.rates["HKD"]);
+        console.log("rates: ", this.state.rates);
+        console.log("base: ", this.state.base);
+        console.log("chosenRates: ", this.state.chosenRates);
 
         return (
             <div className="container">
@@ -67,31 +225,36 @@ class App extends Component {
 
                         <div className="chart-container">
                             <div className="chart-topSection">
-                                <form>
+                                <h2 className="base-title">Base Currency: {this.state.base}</h2>
+                                <h2 className="base-date">{this.state.date}</h2>
+
+                                <form className="base-form">
                                     <p>Choose a Base Currency</p>
-                                    <select name="base-currency-selector">
+                                    <select className="currency-selector" value={this.state.base} onChange={this.selectBase}>
                                         {
                                             Object.keys(this.state.rates).map((currency) => (
-                                                <option 
-                                                    // value={}
-                                                    // onClick={}
-                                                >{currency}</option>
+                                                <option value={currency}>{currency}</option>
                                             ))
                                         }
                                     </select>
                                 </form>
-                                <h2 className="base-title">Base Currency: {this.state.base}</h2>
-                                <h2 className="base-date">{this.state.date}</h2>
+                                <form className="rate-form">
+                                    <p>Choose a Currency Rate</p>
+                                    <select className="currency-selector" value={this.state.rate} onChange={this.selectRate}>
+                                        {
+                                            Object.keys(this.state.rates).map((currency) => (
+                                                <option value={currency}>{currency}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </form>
                             </div>
                             <div className="chart-content">
-                                    {
-                                        Object.keys(this.state.rates).map((currency) => (
-                                            <div 
-                                                className="bar" 
-                                                style={{height: this.state.rates[currency]}}
-                                            >{currency}</div>
-                                        ))
-                                    }
+                                    {/* {rateList} */}
+
+                                    <div className="BarChart">
+                                        {this.rateBar}
+                                    </div>
 
                                     {/* {
                                         this.state.chatLog.map(text => (

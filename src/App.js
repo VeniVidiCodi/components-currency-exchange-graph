@@ -14,7 +14,6 @@ class App extends Component {
     };
 // ==========================================================================
 
-    // Define methods. Must have for forms.
     selectBase = (ev) => {
         this.setState({ base: ev.target.value }, this.updateInfo);
     }
@@ -43,7 +42,7 @@ class App extends Component {
         let heightUpdate = [];
         for (let rate of chosenRates) {
             console.log("RATE", rate);
-            let heightEntry = rate / highest * 50;
+            let heightEntry = rate / highest * 80;
             heightUpdate.push(heightEntry);
             };
         return heightUpdate;
@@ -60,11 +59,9 @@ class App extends Component {
             })
     }
 
-
 // ==========================================================================
 
-  // Special method called when page loads
-  // useful for fetching initial data
+  // Page loading methods
     componentDidMount = () => {
         this.onRefresh();     // Automatically load in page with a fetch
     }
@@ -115,9 +112,9 @@ class App extends Component {
 
                         <div className="chart-container">
                             <div className="chart-topSection">
-                                <h3 className="base-title">Base Currency: {this.state.base}</h3>
-                                <h3 className="base-date">{this.state.date}</h3>
-                        
+                                {/* <h4 className="base-title">Base Currency: {this.state.base}</h4> */}
+                                <h3 className="base-date">Rates for<br /> {this.state.date}</h3>
+
                                 <form className="base-form">
                                     <p>Base Currency</p>
                                     <select className="currency-selector" value={this.state.base} onChange={this.selectBase}>
@@ -140,20 +137,23 @@ class App extends Component {
                                     </select>
                                 </form>
                             </div>
+                            
                             <div className="chart-content">
                                     { this.state.chosenKeys.map((currency, index) => (
                                     <div 
                                         className="bar"
-                                        // value={index}
-                                        onClick={() => this.removeBar(index)}
                                         style={{height: this.state.barHeights[index] + "%"}}>
-                                    {currency}
+                                        <button 
+                                            className="bar-info-button"
+                                            onClick={() => (alert(currency + " rate is equivalent to " + this.state.chosenRates[index] + " " + this.state.base))}>
+                                        i</button>
+                                        <h2 className="bar-header">{currency}</h2>
+                                        <button 
+                                            className="bar-removal-button"
+                                            onClick={() => this.removeBar(index)}>
+                                        x</button>
                                     </div>))}
 
-                                    {/* <div 
-                                        onclick="alert('EUR costs 0.88 pounds')"
-                                        className="bar" 
-                                        style="height: 75%"> EUR <br/> € </div>*/}
                             </div>
                             <div className="chart-bottomSection"></div>
                         </div>

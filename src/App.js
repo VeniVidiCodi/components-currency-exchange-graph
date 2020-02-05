@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+ import React, { Component } from "react";
 import './App.css';
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
         rates: [],
         chosenKeys: [], //['HKD', 'USD'']
         chosenRates: [], // ['1.7468', '98969']
-        height: 1
+        barHeights: [], 
     };
 // ==========================================================================
 
@@ -30,12 +30,36 @@ class App extends Component {
 
         let chosenRate = this.state.rates[choice];
         let chosenRatesUpdate = this.state.chosenRates.concat(chosenRate);
-        this.setState({ chosenRates: chosenRatesUpdate });
+        let heightUpdate = this.calculateBarHeight(chosenRatesUpdate);
+
+        this.setState({ chosenRates: chosenRatesUpdate, 
+                        barHeights: heightUpdate,
+                      });
     }
 
-    fetchUpdateChosenRates = () => {
-        
+    calculateBarHeight(chosenRates) {
+        let highest = Math.max(...chosenRates);
+        console.log("highest...", highest);
+        let heightUpdate = [];
+        for (let rate of chosenRates) {
+            console.log("RATE", rate);
+            let heightEntry = rate / highest * 50;
+            heightUpdate.push(heightEntry);
+            };
+        return heightUpdate;
+        }
+
+    removeBar = (index) => {
+        let indexKey = this.state.chosenKeys[index]
+        console.log("I want to remove index: ", indexKey);
+        let chosenRatesUpdate = this.state.chosenRates.splice(index, 1);
+        let chosenKeyUpdate = this.state.chosenKeys.splice(index, 1);
+        this.setState({
+            chosenRates: this.state.chosenRates,
+            chosenKeys: this.state.chosenKeys,
+            })
     }
+
 
 // ==========================================================================
 
@@ -58,17 +82,17 @@ class App extends Component {
                 // Transfer/Update of Keys
                 let newChosenRates = [];
                 for ( const item of this.state.chosenKeys ){
-                    console.log('item:', item, 'value', this.state.rates[item]);
-                    newChosenRates.push(this.state.rates[item])
+                    console.log('item:', item, 'value', data.rates[item]);
+                    newChosenRates.push(data.rates[item])
                 }
-
+                let newBarHeights = this.calculateBarHeight(newChosenRates);
 
                 // Do state set for real data
                 this.setState({
-                    // base: data.base,
                     date: data.date,
                     rates: data.rates,
                     chosenRates: newChosenRates,
+                    barHeights: newBarHeights,
                 });              
             });
     }
@@ -77,15 +101,10 @@ class App extends Component {
 // ==========================================================================
 
     render() {
-        // console.log('6');
-        const chosenRates = this.state.chosenRates;
         console.log("rendering page...");
-        // console.log(this.state.rates["HKD"]);
-        console.log("rates: ", this.state.rates);
-        console.log("base: ", this.state.base);
         console.log("chosen keys: ", this.state.chosenKeys);
         console.log("chosenRates: ", this.state.chosenRates);
-
+        console.log("barHeights: ", this.state.barHeights);
 
         return (
             <div className="container">
@@ -96,11 +115,11 @@ class App extends Component {
 
                         <div className="chart-container">
                             <div className="chart-topSection">
-                                <h2 className="base-title">Base Currency: {this.state.base}</h2>
-                                <h2 className="base-date">{this.state.date}</h2>
-
+                                <h3 className="base-title">Base Currency: {this.state.base}</h3>
+                                <h3 className="base-date">{this.state.date}</h3>
+                        
                                 <form className="base-form">
-                                    <p>Choose a Base Currency</p>
+                                    <p>Base Currency</p>
                                     <select className="currency-selector" value={this.state.base} onChange={this.selectBase}>
                                         {
                                             Object.keys(this.state.rates).map((currency) => (
@@ -109,8 +128,9 @@ class App extends Component {
                                         }
                                     </select>
                                 </form>
+
                                 <form className="rate-form">
-                                    <p>Choose a Currency Rate</p>
+                                    <p>Currency Rate</p>
                                     <select className="currency-selector" value={this.state.rate} onChange={this.selectRate}>
                                         {
                                             Object.keys(this.state.rates).map((currency) => (
@@ -121,19 +141,14 @@ class App extends Component {
                                 </form>
                             </div>
                             <div className="chart-content">
-                                    {/* <div className="BarChart"> */}
-                                        { this.state.chosenKeys.map((currency, index) => (
-                                        <div className="bar" style={{height: this.state.chosenRates[index] + "%"}}>
-                                        {currency}
-                                        </div>))}
-
-                                        {/* {Object.keys(this.state.chosenKeys).map(currency => (
-                                        <div className="bar" style={{height: currency + "%"}}>
-                                            {currency}
-                                                </div>
-                                            ))
-                                            } */}
-                                    {/* </div> */}
+                                    { this.state.chosenKeys.map((currency, index) => (
+                                    <div 
+                                        className="bar"
+                                        // value={index}
+                                        onClick={() => this.removeBar(index)}
+                                        style={{height: this.state.barHeights[index] + "%"}}>
+                                    {currency}
+                                    </div>))}
 
                                     {/* <div 
                                         onclick="alert('EUR costs 0.88 pounds')"

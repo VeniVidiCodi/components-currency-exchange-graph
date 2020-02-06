@@ -137,7 +137,7 @@ class App extends Component {
                                     </select>
                                 </form>
                             </div>
-                            
+                
                             <div className="chart-content">
                                     { this.state.chosenKeys.map((currency, index) => (
                                     <div 

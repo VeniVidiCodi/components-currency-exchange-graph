@@ -1,5 +1,7 @@
- import React, { Component } from "react";
+import React, { Component } from 'react';
 import './App.css';
+import Nav from './components/Nav/Nav.js';
+import Chart from './components/Chart/Chart.js';
 
 class App extends Component {
   // Define starting state
@@ -35,6 +37,20 @@ class App extends Component {
                         barHeights: heightUpdate,
                       });
     }
+
+    // selectRate = (ev) => {
+    //     let choice = ev.target.value;
+    //     let chosenKeysUpdate = this.state.chosenKeys.concat(choice);
+    //     this.setState({ chosenKeys: chosenKeysUpdate });
+
+    //     let chosenRate = this.state.rates[choice];
+    //     let chosenRatesUpdate = this.state.chosenRates.concat(chosenRate);
+    //     let heightUpdate = this.calculateBarHeight(chosenRatesUpdate);
+
+    //     this.setState({ chosenRates: chosenRatesUpdate, 
+    //                     barHeights: heightUpdate,
+    //                   });
+    // }
 
     calculateBarHeight(chosenRates) {
         let highest = Math.max(...chosenRates);
@@ -82,14 +98,14 @@ class App extends Component {
                     console.log('item:', item, 'value', data.rates[item]);
                     newChosenRates.push(data.rates[item])
                 }
-                let newBarHeights = this.calculateBarHeight(newChosenRates);
+                // let newBarHeights = this.calculateBarHeight(newChosenRates);
 
                 // Do state set for real data
                 this.setState({
                     date: data.date,
                     rates: data.rates,
                     chosenRates: newChosenRates,
-                    barHeights: newBarHeights,
+                    // barHeights: newBarHeights,
                 });              
             });
     }
@@ -98,69 +114,32 @@ class App extends Component {
 // ==========================================================================
 
     render() {
-        console.log("rendering page...");
-        console.log("chosen keys: ", this.state.chosenKeys);
-        console.log("chosenRates: ", this.state.chosenRates);
-        console.log("barHeights: ", this.state.barHeights);
+        // console.log("rendering page...");
+        // console.log("chosen keys: ", this.state.chosenKeys);
+        // console.log("chosenRates: ", this.state.chosenRates);
+        // console.log("barHeights: ", this.state.barHeights);
 
         return (
+
             <div className="container">
-                        <div className="navBar">
-                            <h1>International Currency Rates</h1>
-                        </div>
-                        <div className="margin-left"></div>
-
-                        <div className="chart-container">
-                            <div className="chart-topSection">
-                                {/* <h4 className="base-title">Base Currency: {this.state.base}</h4> */}
-                                <h3 className="base-date">Rates for<br /> {this.state.date}</h3>
-
-                                <form className="base-form">
-                                    <p>Base Currency</p>
-                                    <select className="currency-selector" value={this.state.base} onChange={this.selectBase}>
-                                        {
-                                            Object.keys(this.state.rates).map((currency) => (
-                                                <option value={currency}>{currency}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </form>
-
-                                <form className="rate-form">
-                                    <p>Currency Rate</p>
-                                    <select className="currency-selector" value={this.state.rate} onChange={this.selectRate}>
-                                        {
-                                            Object.keys(this.state.rates).map((currency) => (
-                                                <option value={currency}>{currency}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </form>
-                            </div>
-                
-                            <div className="chart-content">
-                                    { this.state.chosenKeys.map((currency, index) => (
-                                    <div 
-                                        className="bar"
-                                        style={{height: this.state.barHeights[index] + "%"}}>
-                                        <button 
-                                            className="bar-info-button"
-                                            onClick={() => (alert(currency + " rate is equivalent to " + this.state.chosenRates[index] + " " + this.state.base))}>
-                                        i</button>
-                                        <h2 className="bar-header">{currency}</h2>
-                                        <button 
-                                            className="bar-removal-button"
-                                            onClick={() => this.removeBar(index)}>
-                                        x</button>
-                                    </div>))}
-
-                            </div>
-                            <div className="chart-bottomSection"></div>
-                        </div>
-            
-                <div className="margin-right"></div>          
+                    <Nav />
+                <div className="margin-left"></div>
+                    <Chart 
+                        data={this.state.data}
+                        date={this.state.date}
+                        base={this.state.base}
+                        baseSelectorValue={this.state.base}
+                        baseSelectorRates={this.state.ChosenRates}
+                        selectBase={this.selectBase}
+                        rates={this.state.rates}
+                        rateSelectorValue={this.state.rates}
+                        selectRate={this.selectRate}
+                        barHeights={this.state.barHeights}
+                        removeBar={this.removeBar}
+                        chosenRates={this.state.chosenRates}
+                        chosenKeys={this.state.chosenKeys}/>
+                <div className="margin-right"></div>
             </div>
-        
         );
         }
 }

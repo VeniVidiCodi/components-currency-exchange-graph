@@ -1,0 +1,84 @@
+/* Chart Bar Breakdown --------------------------------------- */
+.bar {
+    grid-row: 1;
+    align-self: end;
+    text-align: center;
+    top: -20px;
+    position: static;
+    margin: 0px 3px 0px 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding-bottom: 20px;
+}
+
+.bar:hover {
+    padding: 0px 10px 20px 10px;
+    border: 1px solid white;
+    transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+}
+
+.bar:nth-child(odd) {
+  background: #8bbabb;
+}
+
+.bar:nth-child(even) {
+  background: #c7f0db;
+}
+
+.bar:nth-child(odd):hover {
+    background-color: var(--barcolumn1-highlight);
+    transition: 0.75s;
+}
+
+.bar:nth-child(even):hover {
+    background-color: var(--barcolumn2-highlight);
+    transition: 0.75s;
+}
+
+.bar-header {
+    padding-top: -60px;
+    position: relative;
+    color: var(--header-bright);
+    text-shadow: 0px 0px 10px black;
+    top: -80px;
+    z-index: 200;
+}
+
+.bar-info-button {
+    position: relative;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+    font-weight: bold;
+    background-color: #3d375400;
+    border-color: #3d375400;
+    top: 3px;
+    right: 35%; 
+}
+
+.bar-removal-button {
+    position: relative;
+    font-size: large;
+    font-weight: bold;
+    background-color: #3d375401;
+    border-color: #3e375400;
+    top: -92px;
+    left: 35%;    
+}
+
+.bar-info-button:nth-child(even) {
+  color: black;
+}
+
+.bar-removal-button:nth-child(even) {
+  color: black;
+}
+
+.bar-info-button:nth-child(odd) {
+  color: #c7f0db;
+}
+
+.bar-removal-button:nth-child(odd) {
+  color: #c7f0db;
+}
+

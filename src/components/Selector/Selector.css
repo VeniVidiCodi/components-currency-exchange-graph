@@ -1,0 +1,21 @@
+/* Selector Elements --------------------------------------- */
+.base-form {
+    display: inline-block;
+    grid-column: 1;
+    color: var(--barcolumn1-color);
+    grid-row: 1;
+    text-align: center;
+}
+
+.rate-form {
+    display: inline-block;
+    grid-column: 3 / span 1;
+    color: var(--barcolumn1-color);
+    grid-row: 1;
+    text-align: center;
+}
+
+.base-date {
+    text-align: center;
+    color: var(--barcolumn1-color);
+}

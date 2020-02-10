@@ -2,11 +2,11 @@
 # Currency Exchange Rate Bar Chart
 ---
 
-A data visualization project that uses React to represent actual currency exchange rates using an API.
+A data visualization [chart](https://components-currency-exchange.herokuapp.com/) that uses React to represent actual currency exchange rates using an API published by the European Central Bank.
 
-The code for this repository is a refactoring and reorganization of a previous [React Chart](https://github.com/VeniVidiCodi/react-chart.git) project into components.
+The code for this repository is a refactoring and reorganization of a previous [React project](https://github.com/VeniVidiCodi/react-chart.git) into components.
 
-The data from the API is represented through a bar graph which allows the user to select a "base" currency and to select the "rates" of other currencies, displaying their rate value by the height. The highest exchange rate value is the tallest bar and other rates chosen are displayed in proportion that highest rate.
+Users can select a "base" currency and the "rates" of other currencies to display their value visually by their height. The currency with the highest exchange rate will be the tallest bar and all other chosen rates are displayed in proportion to the highest.
 
 - Add a currency to the graph by the selection dropdown.
 - Remove a currency from the graph by clicking the "x" at the top of the bar.
